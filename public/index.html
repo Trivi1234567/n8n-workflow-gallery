@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Workflow Template Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e55a00;
+            --secondary: #1e1e1e;
+            --bg-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --border: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .repo-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .controls {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .workflow-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 1.5rem;
+            color: white;
+        }
+
+        .workflow-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .workflow-filename {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .workflow-body {
+            padding: 1.5rem;
+        }
+
+        .workflow-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .workflow-stat-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        .workflow-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            height: 3rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .workflow-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .workflow-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text-primary);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .workflow-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(255, 107, 0, 0.05);
+        }
+
+        .workflow-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .workflow-btn.primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+            color: #c53030;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .json-preview {
+            background: #f5f5f5;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .workflow-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    <h1>n8n Workflow Gallery</h1>
+                </div>
+                <a href="https://github.com/Zie619/n8n-workflows" target="_blank" class="repo-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <div class="search-section">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search workflows by name or description...">
+                <button class="btn" id="refreshBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 4v6h6M23 20v-6h-6"/>
+                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+            <div class="filters">
+                <select class="filter-select" id="sortSelect">
+                    <option value="name">Sort by Name</option>
+                    <option value="nodes">Sort by Nodes Count</option>
+                    <option value="size">Sort by File Size</option>
+                    <option value="recent">Sort by Most Recent</option>
+                </select>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary);">
+                    <input type="checkbox" id="compactView"> Compact View
+                </label>
+            </div>
+        </div>
+
+        <div class="stats" id="statsContainer">
+            <div class="stat-card">
+                <div class="stat-value" id="totalWorkflows">0</div>
+                <div class="stat-label">Total Workflows</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalNodes">0</div>
+                <div class="stat-label">Total Nodes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgNodes">0</div>
+                <div class="stat-label">Avg Nodes/Workflow</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="lastUpdate">-</div>
+                <div class="stat-label">Last Sync</div>
+            </div>
+        </div>
+
+        <div id="workflowContainer">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading workflows from GitHub...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Workflow Preview</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalDetails"></div>
+                <h3 style="margin: 1.5rem 0 1rem;">JSON Preview</h3>
+                <pre class="json-preview" id="jsonPreview"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allWorkflows = [];
+        let filteredWorkflows = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWorkflows();
+            setupEventListeners();
+            
+            // Auto-refresh every 5 minutes
+            setInterval(loadWorkflows, 5 * 60 * 1000);
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', filterWorkflows);
+            document.getElementById('sortSelect').addEventListener('change', sortWorkflows);
+            document.getElementById('compactView').addEventListener('change', renderWorkflows);
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                loadWorkflows(true);
+            });
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('previewModal').addEventListener('click', (e) => {
+                if (e.target.id === 'previewModal') closeModal();
+            });
+        }
+
+        // Load workflows from API
+        async function loadWorkflows(clearCache = false) {
+            const container = document.getElementById('workflowContainer');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading workflows from GitHub...</p></div>';
+            
+            try {
+                // Clear cache if requested
+                if (clearCache) {
+                    await fetch('/api/clear-cache', { method: 'POST' });
+                }
+                
+                const response = await fetch('/api/workflows');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allWorkflows = data.workflows;
+                    filteredWorkflows = [...allWorkflows];
+                    updateStats();
+                    sortWorkflows();
+                    renderWorkflows();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <h3>Error Loading Workflows</h3>
+                        <p>${error.message}</p>
+                        <button class="btn" onclick="loadWorkflows()">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalNodes = allWorkflows.reduce((sum, w) => sum + (w.nodes_count || 0), 0);
+            const avgNodes = allWorkflows.length > 0 ? Math.round(totalNodes / allWorkflows.length) : 0;
+            
+            document.getElementById('totalWorkflows').textContent = allWorkflows.length;
+            document.getElementById('totalNodes').textContent = totalNodes;
+            document.getElementById('avgNodes').textContent = avgNodes;
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Filter workflows
+        function filterWorkflows() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredWorkflows = [...allWorkflows];
+            } else {
+                filteredWorkflows = allWorkflows.filter(w => 
+                    w.name.toLowerCase().includes(searchTerm) ||
+                    (w.description && w.description.toLowerCase().includes(searchTerm)) ||
+                    w.filename.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderWorkflows();
+        }
+
+        // Sort workflows
+        function sortWorkflows() {
+            const sortBy = document.getElementById('sortSelect').value;
+            
+            filteredWorkflows.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'nodes':
+                        return (b.nodes_count || 0) - (a.nodes_count || 0);
+                    case 'size':
+                        return b.size - a.size;
+                    case 'recent':
+                        return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+                    default:
+                        return 0;
+                }
+            });
+            
+            renderWorkflows();
+        }
+
+        // Render workflows
+        function renderWorkflows() {
+            const container = document.getElementById('workflowContainer');
+            const isCompact = document.getElementById('compactView').checked;
+            
+            if (filteredWorkflows.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <h3>No workflows found</h3>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = filteredWorkflows.map(w => `
+                <div class="workflow-card" onclick="showPreview('${w.filename}')">
+                    <div class="workflow-header">
+                        <div class="workflow-title" title="${w.name}">${w.name}</div>
+                        <div class="workflow-filename">${w.filename}</div>
+                    </div>
+                    ${!isCompact ? `
+                        <div class="workflow-body">
+                            <div class="workflow-stats">
+                                <div class="workflow-stat">
+                                    <svg class="workflow-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <circle cx="4" cy="12" r="3"/>
+                                        <circle cx="20" cy="12" r="3"/>
+                                    </svg>
+                                    ${w.nodes_count || 0} nodes
+                                </div>
+                                <div class="workflow-stat">
+                                    <svg class="workflow-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 3h18v18H3zM12 8v8m-4-4h8"/>
+                                    </svg>
+                                    ${(w.size / 1024).toFixed(1)} KB
+                                </div>
+                            </div>
+                            <div class="workflow-description">
+                                ${w.description || 'No description available'}
+                            </div>
+                            <div class="workflow-actions">
+                                <a href="${w.download_url}" class="workflow-btn" download="${w.filename}" onclick="event.stopPropagation()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7 10 12 15 17 10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Download
+                                </a>
+                                <a href="${w.url}" target="_blank" class="workflow-btn primary" onclick="event.stopPropagation()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            container.innerHTML = `<div class="workflow-grid">${html}</div>`;
+        }
+
+        // Show preview modal
+        function showPreview(filename) {
+            const workflow = allWorkflows.find(w => w.filename === filename);
+            if (!workflow) return;
+            
+            document.getElementById('modalTitle').textContent = workflow.name;
+            document.getElementById('modalDetails').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <strong>Filename:</strong><br>${workflow.filename}
+                    </div>
+                    <div>
+                        <strong>Nodes:</strong><br>${workflow.nodes_count || 0}
+                    </div>
+                    <div>
+                        <strong>Connections:</strong><br>${workflow.connections_count || 0}
+                    </div>
+                    <div>
+                        <strong>Size:</strong><br>${(workflow.size / 1024).toFixed(2)} KB
+                    </div>
+                </div>
+                ${workflow.description ? `<div><strong>Description:</strong><br>${workflow.description}</div>` : ''}
+            `;
+            
+            // Format JSON for display
+            const json = JSON.stringify(workflow.workflow, null, 2);
+            document.getElementById('jsonPreview').textContent = json;
+            
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('previewModal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
