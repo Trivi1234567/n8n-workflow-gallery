@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: n8n-workflow-gallery
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Optional: Add a GitHub token to increase API rate limits (60 requests/hour without, 5000 with token)
+      # You can create a token at: https://github.com/settings/tokens
+      # No special permissions needed - just basic public repo access
+      # - key: GITHUB_TOKEN
+      #   value: your-github-token-here
+    healthCheckPath: /api/health
+    autoDeploy: false # Set to true if you want automatic deploys from your repo
